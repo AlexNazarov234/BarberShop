@@ -3,12 +3,15 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
-configure do
-	@db = SQLite3::Database.new 'barbershop.db'
-	@db.execute 'CREATE TABLE "Users" ("Id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "Name" VARCHAR, "Phone" VARCHAR, "DateStamp" VARCHAR, "Barber" VARCHAR, "Color" VARCHAR)'
+def get_db
+	return SQLite3::Database.new 'barbershop.db'
 end
 
-
+configure do
+	db = get_db
+#	db.execute 'CREATE TABLE "Users" ("Id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+#	            "Name" VARCHAR, "Phone" VARCHAR, "DateStamp" VARCHAR, "Barber" VARCHAR, "Color" VARCHAR)'
+end
 
 get '/' do
 	erb "Hello! <a href=\"https://github.com/bootstrap-ruby/sinatra-bootstrap\">Original</a> pattern has been modified for <a href=\"http://rubyschool.us/\">Ruby School</a>"			
@@ -42,12 +45,16 @@ post '/visit' do
 	end
 
 	# Save to DB
-	db = SQLite3::Database.new '../Base/Barbershop.sqlite'
+	#db = SQLite3::Database.new '../Base/Barbershop.sqlite'
 
 	#db.execute ""
+	db = get_db
+	db.execute 'insert into users 	(name, phone, DateStamp, barber, color) 
+	values (?, ?, ?, ?, ?)', [@username, @phone, @datetime, @barber, @color]
 
-	db.close
+	#db.close
 
 	erb "OK, username is #{@username}, #{@phone}, #{@datetime}, #{@barber}, #{@color}"
 
 end
+
