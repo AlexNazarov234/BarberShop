@@ -62,11 +62,8 @@ end
 
 get '/showusers' do
 	db = get_db
-	db.execute 'select * from Users' do |row|
-		#puts "#{row['Id']}"
-		"hi"
-	end	
-	db.close
 
-	"hi wsf"	
+ 	@results = db.execute 'select * from Users'
+
+	erb :showusers
 end

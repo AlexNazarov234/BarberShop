@@ -1,0 +1,28 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Phone</th>
+			<th>DateStamp</th>
+			<th>Barber</th>
+			<th>Color</th>
+		</tr>
+	</thead>
+
+	<body>
+		<% @results.each do |row| %>
+			<tr>
+				<td><%= row['Id'] %></td>
+				<td><%= row['Name'] %></td>
+				<td><%= row['Phone'] %></td>
+				<td><%= row['DateStamp'] %></td>
+				<td><%= row['Barber'] %></td>
+				<td><%= row['Color'] %></td>
+			</tr>
+		<% end %>
+	</body>
+</table>
+
+
+
