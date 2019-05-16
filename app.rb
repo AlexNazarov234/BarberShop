@@ -2,17 +2,37 @@ require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
-
+	
 def get_db
 	db = SQLite3::Database.new 'barbershop.db'
 	db.results_as_hash = true 
 	return db
 end
 
-configure do
+def is_barber_exists? db, name
+	db.execute('select * from barbers where name=?', [name]).length	> 0 
+end
+
+def seed_db db, barbers
+	barbers.each do |barber|
+		if !is_barber_exists? db, barber
+			db.execute('insert into barbers (name) values (?)', [barber])
+		end
+	end 
+
+end
+
+before do
 	db = get_db
+ 	@barbers = db.execute 'select * from barbers'
+end
+
+configure do
+	db = get_db	
 #	db.execute 'CREATE TABLE "Users" ("Id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 #	            "Name" VARCHAR, "Phone" VARCHAR, "DateStamp" VARCHAR, "Barber" VARCHAR, "Color" VARCHAR)'
+
+	seed_db db, ['Barb 1', 'Barb 2', 'Barb 3']
 end
 
 get '/' do
